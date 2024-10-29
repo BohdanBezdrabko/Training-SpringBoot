@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  books_rest_api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: books_rest_api
+    container_name: books_rest_api
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongodb
+    networks:
+      - books-network
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    hostname: mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password
+
+    volumes:
+      - mongodb-volume:/data/db
+    networks:
+      - books-network
+
+networks:
+  books-network:
+
+volumes:
+  mongodb-volume:
