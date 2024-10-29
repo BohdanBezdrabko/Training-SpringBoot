@@ -36,8 +36,8 @@ public class BookService {
         return bookRepository.findById(Id).orElse(null);
     }
 
-    public BookEntity getBookByStatus(BookStatus status) {
-        return bookRepository.findByStatus(status);
+    public List<BookEntity> getBooksByStatus(BookStatus status) {
+        return bookRepository.findAllByStatus(status);
     }
 
     public void deleteBookById(String Id) {
@@ -46,21 +46,7 @@ public class BookService {
 
     public BookEntity updateBook(String id, UpdateBookRequest request) {
         BookEntity book = bookRepository.findById(id).orElseThrow();
-        if (request.getTitle() != null) {
-            book.setTitle(request.getTitle());
-        }
-        if (request.getAuthor() != null) {
-            book.setAuthor(request.getAuthor());
-        }
-        if (request.getPublishedDate() != null) {
-            book.setPublishedDate(request.getPublishedDate());
-        }
-        if (request.getIsbn() != null) {
-            book.setIsbn(request.getIsbn());
-        }
-        if (request.getStatus() != null) {
-            book.setStatus(request.getStatus());
-        }
+        book = request.updateBookEntity(book);
         return bookRepository.save(book);
     }
 }
