@@ -13,6 +13,8 @@ services:
       - mongodb
     networks:
       - books-network
+    environment:
+      - SPRING_DATA_MONGODB_HOST=mongodb
   mongodb:
     image: mongo
     container_name: mongodb

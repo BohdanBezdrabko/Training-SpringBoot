@@ -2,9 +2,12 @@ package org.example.booksrestclient.services;
 
 import org.example.booksrestclient.dto.request.CreateBookRequest;
 import org.example.booksrestclient.dto.request.UpdateBookRequest;
+import org.example.booksrestclient.exceptions.exceptions.BookISBNAlreadyExistException;
+import org.example.booksrestclient.exceptions.exceptions.BookNotFoundException;
 import org.example.booksrestclient.models.BookEntity;
 import org.example.booksrestclient.models.BookStatus;
 import org.example.booksrestclient.repository.BookRepository;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +20,7 @@ public class BookService {
         this.bookRepository = bookRepository;
     }
 
-    public BookEntity createBook(CreateBookRequest request) {
+    public BookEntity createBook(CreateBookRequest request) throws BookISBNAlreadyExistException {
         BookEntity book = BookEntity.builder()
                 .title(request.getTitle())
                 .author(request.getAuthor())
@@ -25,15 +28,20 @@ public class BookService {
                 .isbn(request.getIsbn())
                 .status(request.getStatus())
                 .build();
-        return bookRepository.save(book);
+        try {
+           return bookRepository.save(book);
+        } catch (DuplicateKeyException e) {
+            throw new BookISBNAlreadyExistException(request.getIsbn());
+        }
+
     }
 
     public List<BookEntity> getAllBooks() {
         return bookRepository.findAll();
     }
 
-    public BookEntity getBookById(String Id) {
-        return bookRepository.findById(Id).orElse(null);
+    public BookEntity getBookById(String id) throws BookNotFoundException {
+        return bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
     }
 
     public List<BookEntity> getBooksByStatus(BookStatus status) {
@@ -44,8 +52,8 @@ public class BookService {
         bookRepository.deleteById(Id);
     }
 
-    public BookEntity updateBook(String id, UpdateBookRequest request) {
-        BookEntity book = bookRepository.findById(id).orElseThrow();
+    public BookEntity updateBook(String id, UpdateBookRequest request) throws BookNotFoundException {
+        BookEntity book = bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
         book = request.updateBookEntity(book);
         return bookRepository.save(book);
     }
