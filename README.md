@@ -54,5 +54,3 @@ This project is a training exercise to learn Spring Boot by building a RESTful A
    Once running, the API will be available at `http://localhost:8080/api/books`.
 
 ---
-
-This version provides a clear guide on how to set up, run, and use the project without including GitHub steps.
