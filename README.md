@@ -33,7 +33,7 @@ This project is a training exercise to learn Spring Boot by building a RESTful A
 ## Running the Project
 
 ### Prerequisites
-- **Java 11+**
+- **Java 21**
 - **MongoDB** (local instance or MongoDB Atlas account)
 - **Docker** (to containerize and run the app)
 
