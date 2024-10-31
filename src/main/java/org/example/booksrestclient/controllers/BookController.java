@@ -4,6 +4,8 @@ package org.example.booksrestclient.controllers;
 import jakarta.validation.Valid;
 import org.example.booksrestclient.dto.request.CreateBookRequest;
 import org.example.booksrestclient.dto.request.UpdateBookRequest;
+import org.example.booksrestclient.exceptions.exceptions.BookISBNAlreadyExistException;
+import org.example.booksrestclient.exceptions.exceptions.BookNotFoundException;
 import org.example.booksrestclient.models.BookEntity;
 import org.example.booksrestclient.models.BookStatus;
 import org.example.booksrestclient.services.BookService;
@@ -23,37 +25,37 @@ public class BookController {
     }
 
     @PostMapping
-    public ResponseEntity<BookEntity> createBook(@Valid @RequestBody CreateBookRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(bookService.createBook(request));
+    @ResponseStatus(HttpStatus.CREATED)
+    public BookEntity createBook(@Valid @RequestBody CreateBookRequest request) throws BookISBNAlreadyExistException {
+        return bookService.createBook(request);
     }
 
     @GetMapping
-    public ResponseEntity<List<BookEntity>> getAllBooks() {
-        return ResponseEntity.status(HttpStatus.OK).body(bookService.getAllBooks());
+    public List<BookEntity> getAllBooks() {
+        return bookService.getAllBooks();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BookEntity> getBook(@PathVariable("id") String id) {
-        return ResponseEntity.status(HttpStatus.OK).body(bookService.getBookById(id));
+    public BookEntity getBook(@PathVariable("id") String id) throws BookNotFoundException {
+        return bookService.getBookById(id);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BookEntity> updateBook(
+    public BookEntity updateBook(
             @PathVariable("id") String id,
             @Valid @RequestBody UpdateBookRequest request
-    ) {
-        return ResponseEntity.status(HttpStatus.OK).body(bookService.updateBook(id, request));
+    ) throws BookNotFoundException {
+        return bookService.updateBook(id, request);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteBook(@PathVariable("id") String id) {
+    public void deleteBook(@PathVariable("id") String id) {
         bookService.deleteBookById(id);
-        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @GetMapping("/status/{status}")
-    public ResponseEntity<List<BookEntity>> getBooksByStatus(@PathVariable("status") BookStatus status) {
-        return ResponseEntity.status(HttpStatus.OK).body(bookService.getBooksByStatus(status));
+    public List<BookEntity> getBooksByStatus(@PathVariable("status") BookStatus status) {
+        return bookService.getBooksByStatus(status);
     }
 }
 
