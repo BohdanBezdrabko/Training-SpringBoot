@@ -57,6 +57,10 @@ public class BookController {
     public List<BookEntity> getBooksByStatus(@PathVariable("status") BookStatus status) {
         return bookService.getBooksByStatus(status);
     }
+    @GetMapping("/book/{title}")
+    public List<BookEntity> searchBooks(@PathVariable("title") String title) {
+        return bookService.searchBooksByTitle(title);
+    }
 }
 
 

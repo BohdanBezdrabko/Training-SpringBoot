@@ -40,3 +40,9 @@ Content-Type: application/json
 {
   "author": "Rey Bredbery"
 }
+
+### GET
+GET http://localhost:8080/api/books/book/If Cats disapear from the world
+
+
+

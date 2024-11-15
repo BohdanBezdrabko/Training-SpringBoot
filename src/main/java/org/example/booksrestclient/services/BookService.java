@@ -57,4 +57,7 @@ public class BookService {
         book = request.updateBookEntity(book);
         return bookRepository.save(book);
     }
+    public List<BookEntity> searchBooksByTitle(String title) {
+        return bookRepository.findByTitleContainingIgnoreCase(title);
+    }
 }
