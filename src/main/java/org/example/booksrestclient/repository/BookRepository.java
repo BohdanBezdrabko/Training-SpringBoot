@@ -10,6 +10,5 @@ import java.util.List;
 @Repository
 public interface BookRepository extends MongoRepository<BookEntity, String> {
    List<BookEntity> findAllByStatus(BookStatus status);
-
    List<BookEntity> findByTitleContainingIgnoreCase(String title);
 }

@@ -20,4 +20,7 @@ public class CreateBookRequest {
     private String isbn;
 
     private BookStatus status;
+
+    public CreateBookRequest(String testBook, String author, String s, Date date, BookStatus bookStatus) {
+    }
 }
